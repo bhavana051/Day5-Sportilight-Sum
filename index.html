@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spotlight Sums</title>
+  <style>
+   
+    .container {
+      background-color: rgb(42, 31, 56);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    
+    }
+    
+    .input-output {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    textarea {
+      width: 300px;
+      height: 150px;
+      margin-bottom: 10px;
+      border-radius: 20px;
+      background: transparent;
+      color: white;
+      border: 4px solid white;
+      font-size: 1rem;
+      text-align: center;
+      
+      
+    }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 30px;
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      
+    }
+    
+    #outputGrid {
+      width: 300px;
+      height: 200px;
+      background-color: #f7f7f7;
+      padding: 10px;
+      border-radius: 40px;
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      justify-content: center;
+      line-height: 200px;
+    }
+    h2{
+      font-family: cursive;
+      text-align: center;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+   
+  <div class="container">
+    
+    <div class="input-output">
+      <h2><u>Spotlight Sum.</u></h2>
+      <textarea id="inputGrid" placeholder="Enter the grid..."></textarea>
+      <button onclick="calculateSpotlightSums()">Calculate</button>
+      <div id="outputGrid"></div>
+    </div>
+  </div>
+  
+  <script>
+    function calculateSpotlightSums() {
+      const inputGrid = document.getElementById("inputGrid").value;
+      
+      try {
+        const grid = JSON.parse(inputGrid);
+        const result = calculateSpotlightSumsGrid(grid);
+        document.getElementById("outputGrid").textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        document.getElementById("outputGrid").textContent = "Invalid input grid!";
+      }
+    }
+
+    function calculateSpotlightSumsGrid(grid) {
+      const rows = grid.length;
+      const cols = grid[0].length;
+      const result = [];
+
+      for (let i = 0; i < rows; i++) {
+        result[i] = [];
+        for (let j = 0; j < cols; j++) {
+          const currentNumber = grid[i][j];
+          let sum = currentNumber;
+
+          if (i > 0) {
+            sum += grid[i - 1][j]; // Top
+            if (j > 0) sum += grid[i - 1][j - 1]; // Top-left
+            if (j < cols - 1) sum += grid[i - 1][j + 1]; // Top-right
+          }
+
+          if (i < rows - 1) {
+            sum += grid[i + 1][j]; // Bottom
+            if (j > 0) sum += grid[i + 1][j - 1]; // Bottom-left
+            if (j < cols - 1) sum += grid[i + 1][j + 1]; // Bottom-right
+          }
+
+          if (j > 0) sum += grid[i][j - 1]; // Left
+          if (j < cols - 1) sum += grid[i][j + 1]; // Right
+
+          result[i][j] = sum;
+        }
+      }
+
+      return result;
+    }
+  </script>
+</body>
+</html>
